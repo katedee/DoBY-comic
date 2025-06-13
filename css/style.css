@@ -10,34 +10,6 @@
  */
 @import "/css/reset.css";
 
-/* FONTS */
-
-header,
-h1,
-h2,
-h3,
-h4,
-h5 {
-  font-family: "IM Fell English", serif;
-  font-weight: 400;
-  font-style: normal;
-  /**
-   * Todo: Write why we use rem units and set them throughout the stylesheet
-   * https://www.youtube.com/watch?v=N5wpD9Ov_To
-   */
-  margin-bottom: 1rem;
-}
-
-p {
-  font-family: "Lato", sans-serif;
-  margin-bottom: .75rem;
-}
-
-/* This is to offset some weird height stuff with eleventy img */
-img {
-  height: auto;
-}
-
 /* GLOBAL */
 
 /**
@@ -70,12 +42,44 @@ img {
   --link-color-hover: #da5437;
   --text-color: #222;
 
+
+  --heading-font: "IM Fell English", serif;
+  --body-font: "Lato", sans-serif;
+
    /**
   * I recommend not changing this, UNLESS you are getting rid of the paper tear effect
   * If you DON'T want the paper tear effect remove from PAPER TEAR BEGIN to PAPER TEAR END
   * Roughly lines 149-172 of this file, although that might move a bit as things get added.
   **/
   --content-bg: #fff;
+}
+
+/* FONTS */
+
+header,
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--heading-font);
+  font-weight: 400;
+  font-style: normal;
+  /**
+   * Todo: Write why we use rem units and set them throughout the stylesheet
+   * https://www.youtube.com/watch?v=N5wpD9Ov_To
+   */
+  margin-bottom: 1rem;
+}
+
+p {
+  font-family: var(--body-font);
+  margin-bottom: .75rem;
+}
+
+/* This is to offset some weird height stuff with eleventy img */
+img {
+  height: auto;
 }
 
 
@@ -103,6 +107,7 @@ header {
   align-items: center;
   width: var(--pg-width);
   margin: 2rem auto 0 auto;
+  position: relative;
 }
 
 header nav {
@@ -115,8 +120,15 @@ header nav {
   padding: 10px;
 }
 
-/* FOOTER */
+.update-badge {
+  margin: 3% 0 -1% 0;
+  color: var(--text-color);
+  background-color: transparent;
+  position: static;
+}
 
+
+/* FOOTER */
 footer {
   color: var(--text-color);
   margin-top: 2rem;
@@ -293,5 +305,44 @@ footer p {
 
   :root {
     --pg-width: min(100%);
+  }
+}
+
+@media screen and (min-width: 700px) {
+  .update-badge {
+    position: relative;
+    color: var(--content-bg);
+    font: var(--heading-font);
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    background: var(--link-color-hover);
+    text-transform: uppercase;
+    font-size: 11px;
+    padding-top: 10px;
+  }
+  .update-badge:before,
+  .update-badge:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 70px;
+    width: 70px;
+    background: var(--link-color-hover);
+    z-index: -1;
+  }
+  .update-badge:before {
+    transform: rotate(30deg);
+  }
+  .update-badge:after {
+    transform: rotate(60deg);
+  }
+
+  .badge-wrap {
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    right: 0;
   }
 }
