@@ -100,7 +100,7 @@ const v_mainHtml = `
 `;
 const v_formHtml = `
     <h2 id="c_widgetTitle">${s_widgetTitle}</h2>
-
+    <p>control + command + space OR windows key + .(period) for the emoji menu ☺️</p>
     <div id="c_nameWrapper" class="c-inputWrapper">
         <label class="c-label c-nameLabel" for="entry.${s_nameId}">${s_nameFieldLabel}</label>
         <input class="c-input c-nameInput" name="entry.${s_nameId}" id="entry.${s_nameId}" type="text" maxlength="${s_maxLengthName}" required>
