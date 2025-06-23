@@ -10,4 +10,4 @@ Vasilisa is the daughter of a rumoured witch. She dreams of squirreling away som
 
 The Death of Baba Yaga is a gothic western reimagining of the myth of Vasilisa the Beautiful.
 
-It is written and drawn by Kate Drwęcka.
+It is written and drawn by [Kate Drwęcka](https://www.katedee.com/).

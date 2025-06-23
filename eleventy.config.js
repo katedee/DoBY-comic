@@ -12,29 +12,33 @@ const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 
 module.exports = function(eleventyConfig) {
-		// Copy `img` and `css` folders to output
-		eleventyConfig.addPassthroughCopy("img");
-		eleventyConfig.addPassthroughCopy("css");
-		eleventyConfig.addPassthroughCopy("js");
-		eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
-			widths: [100, "auto"], 
-			defaultAttributes: {
-			  loading: 'lazy'
+	// Copy `img` and `css` folders to output
+	eleventyConfig.addPassthroughCopy("img");
+	eleventyConfig.addPassthroughCopy("css");
+	eleventyConfig.addPassthroughCopy("js");
+	eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
+		widths: [100, "auto"], 
+		defaultAttributes: {
+			loading: 'lazy'
+		}
+	});
+	eleventyConfig.addPlugin(pluginRss);
+	eleventyConfig.addLiquidFilter("utcDate", function(value) { 
+		const utc= (new Date(value)).toUTCString().split(' ');
+		return `${utc[2]} ${utc[1]}, ${utc[3]}`;
+	});
+	eleventyConfig.addAsyncFilter("chapters", async function(collections) { 
+		return Object.keys(collections).filter(function (propertyName) {
+			if (propertyName.indexOf("chapter") === 0){
+				return propertyName;
 			}
 		});
-		eleventyConfig.addPlugin(pluginRss);
-		eleventyConfig.addLiquidFilter("utcDate", function(value) { 
-			const utc= (new Date(value)).toUTCString().split(' ');
-			return `${utc[2]} ${utc[1]}, ${utc[3]}`;
-		});
-		eleventyConfig.addAsyncFilter("chapters", async function(collections) { 
-			return Object.keys(collections).filter(function (propertyName) {
-				if (propertyName.indexOf("chapter") === 0){
-					return propertyName;
-				}
-			});
-		});
-		
+	});
+	eleventyConfig.addPreprocessor("drafts", "*", (data, content) => {
+		if(data.draft && process.env.ELEVENTY_RUN_MODE === "build") {
+			return false;
+		}
+	});	
 }
 
 
