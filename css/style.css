@@ -97,6 +97,16 @@ a:hover {
   color: var(--link-color-hover);
 }
 
+
+figure {
+ margin: 2rem 0;
+}
+
+figcaption {
+  font-family: var(--body-font);
+  margin-bottom: .75rem;
+}
+
 /* HEADER */
 
 header {
