@@ -17,7 +17,10 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addPassthroughCopy("css");
 	eleventyConfig.addPassthroughCopy("js");
 	eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
-		widths: [100, "auto"], 
+		widths: [100, "auto"],
+		sharpOptions: {
+			animated: true,
+		}, 
 		defaultAttributes: {
 			loading: 'lazy'
 		}
