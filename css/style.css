@@ -9,6 +9,7 @@
  * seperate the reset settings from the rest of the styles.
  */
 @import "/css/reset.css";
+@import "/css/comments.css";
 
 /* GLOBAL */
 
