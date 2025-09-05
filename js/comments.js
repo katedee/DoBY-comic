@@ -35,8 +35,8 @@ const googleFields = {
  * I've set defaults for these settings, so you don't need to modify them but can if you want.
  */
 // the author badge that shows if it's one of your verified comments
-const authorBadgeText = "• ✅ (author)";
-
+const authorBadgeText = "✅ (author) • ";
+const replyToText = "replying to";
 // If replies to comments are open/visible by default (false) or collapsed (true).
 // I've defaulted this to false because people hate clicking, so we're showing comments by default.
 const collapsedReplies = false;
@@ -69,12 +69,13 @@ const thisPageUrl = document.currentScript.getAttribute('page-url');
 	In this implementation, columns are mapped to the following:
 		A - timestamp, the time the comment was left
 		B - name, the text left in the comment name field
-		C - comment, the text left in the comment field
-		D - page url, the page the comment was left on
-        E - reply, the ID of the comment this is a reply to
-		F - isAuthor, boolean indicating if the comment was left by the actual author
+        C - website (no longer in use, but can't delete column)
+		D - comment, the text left in the comment field
+		E - page url, the page the comment was left on
+        F - reply, the ID of the comment this is a reply to
+		G - isAuthor, boolean indicating if the comment was left by the actual author
 */
-const sqlStatement = encodeURIComponent(`SELECT A, B, C, D, F WHERE E = '${thisPageUrl}'`);
+const sqlStatement = encodeURIComponent(`SELECT A, B, C, D, F, G WHERE E = '${thisPageUrl}'`);
 
 // Construct the URL for fetching the data
 const csvUrl = `${ sheetsUrl }/gviz/tq?tqx=out:csv&sheet=comments&tq=${sqlStatement}&headers=1`;
@@ -205,7 +206,7 @@ function createComment(comment, isInitialLoad) {
         <div class="comment-content-wrap">
             <div class="comment-header">
                 <span class="comment-name">${name} ${comment['isauthor'] ? `<span class="author-badge">${authorBadgeText}</span>` : ``}</span>
-                ${(comment['reply']) ? `<span class="replying-to" onclick="highlightComment('${comment['reply']}')"> @ ${comment['reply'].split('|--|')[0]}</span>` : ``}
+                ${(comment['reply']) ? `<span class="replying-to" onclick="highlightComment('${comment['reply']}')"> ${replyToText} ${comment['reply'].split('|--|')[0]}</span>` : ``}
                 <span class="comment-date">${date}</span>
             </div>
             ${textFormatted}
