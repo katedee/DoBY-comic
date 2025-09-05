@@ -194,7 +194,7 @@ function createComment(comment, isInitialLoad) {
     const name = comment['name'];
     const date = formatDate(comment['timestamp']);
     const text = comment['comment'].replace(/\[comma\]/g, ',').split(/\r?\n/).filter(Boolean);
-    const textFormatted = text.map(text => `<p>${text}</p>`).join('')
+    const textFormatted = text.map(text => `<p>${text}</p>`).join('');
     const commentDiv = document.createElement('div');
 
     commentDiv.setAttribute('class', 'comment-div');
@@ -205,7 +205,7 @@ function createComment(comment, isInitialLoad) {
         <div class="comment-content-wrap">
             <div class="comment-header">
                 <span class="comment-name">${name} ${comment['isauthor'] ? `<span class="author-badge">${authorBadgeText}</span>` : ``}</span>
-                ${(comment['reply'] && comment['reply'] !== `"`) ? `<span class="replying-to" onclick="highlightComment('${comment['reply']}')"> @ ${comment['reply'].split('|--|')[0]}</span>` : ``}
+                ${(comment['reply']) ? `<span class="replying-to" onclick="highlightComment('${comment['reply']}')"> @ ${comment['reply'].split('|--|')[0]}</span>` : ``}
                 <span class="comment-date">${date}</span>
             </div>
             ${textFormatted}
@@ -220,7 +220,7 @@ function createComment(comment, isInitialLoad) {
     `;
 
     if(!document.getElementById(commentId)){
-        if (!comment['reply'] || comment['reply'] == `"`) {
+        if (!comment['reply']) {
             (batchComments && isInitialLoad ) ? commentsContainer.appendChild(commentDiv) : commentsContainer.prepend(commentDiv);
         } else {
             const parentId = `${comment['reply']}-replies`;
@@ -345,18 +345,28 @@ function clearForm () {
 }
 
 // eternal thanks to matthew-e-brown for this one https://stackoverflow.com/a/59219146
+// some modifications on the split in lines, and then a little extra formatting in the lines map + match
 function csvToJson(text, headers, quoteChar = '"', delimiter = ',') {
     const regex = new RegExp(`\\s*(${quoteChar})?(.*?)\\1\\s*(?:${delimiter}|$)`, 'gs');
      const match = line => [...line.matchAll(regex)]
       .map(m => m[2])  // we only want the second capture group
       .slice(0, -1);   // cut off blank match at the end
-     const lines = text.split('"\n');
+    /**
+     *  
+     * this split is not perfect as it can still break on a comment where someone quotes a character, and then starts a new line 
+     * ex. What do you mean "no charges"
+     * 
+     * writing more text for the comment here
+     * 
+     * */   
+     const lines = text.split('"\n'); 
     const heads = headers ?? match(lines.shift());
      return lines.map(line => {
       return match(line).reduce((acc, cur, i) => {
-        // Attempt to parse as a number; replace blank matches with `null`
-        const val = cur.length <= 0 ? null : Number(cur) || cur;
-        const key = heads[i].replace(/[^A-Z0-9]/ig, '').toLowerCase() ?? `extra_${i}`;
+        // Attempt to parse as a number; replace blank matches with `null` 
+        const val = (cur.length <= 0 || cur == '"') ? null : Number(cur) || cur;
+        // this double replace is not the most efficient, but brain tired of regex
+        const key = heads[i].replace(/\s/g, '').replace('"','').toLowerCase() ?? `extra_${i}`;
         return { ...acc, [key]: val };
       }, {});
     });
