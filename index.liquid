@@ -18,14 +18,12 @@ individual collections to use within templates.
 <div class="comic{% if latest.data.spread %} double-page{% endif %}">
   {% render 'comic.liquid', collection: collections.comic, page: latest.page, images: latest.data.images, alt: latest.data.alt %}
 </div>
-{%# If we have author notes, include them %}
-{% unless latest.content == "" %}
-  <div class="authorNotes paperDiv">
-    <h1>{{ latest.data.title }}</h1>
-    <p class="authorNotes-date">posted on {{ latest.date | utcDate }}</p>
-    {{ latest.content }}
-  </div>
-{% endunless %}
+
+<div class="authorNotes paperDiv">
+  <h1>{{ latest.data.title }}</h1>
+  <p class="authorNotes-date">posted on {{ latest.date | utcDate }}</p>
+  {{ latest.content }}
+</div>
 
 <div class="paperDiv commentForm">
   {% comment %} <div id="c_widget"></div>
