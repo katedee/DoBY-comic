@@ -32,51 +32,25 @@
     {%- if title %}
       <meta property="og:title" content="{{ title }}" />
       <meta property="og:url" href="{{ metadata.base }}{{ page.url }}" />
-      <meta property="og:image" content="{{ metadata.base }}{{ images[0] }}" />
+      {%- if page.metaimage %}
+        <meta property="og:image" content="{{ metadata.base }}{{ page.metaimage }}" />
+        {% else %}
+        <meta property="og:image" content="{{ metadata.base }}{{ images[0] }}" />
+      {% endif %}
     {% else %}
       <meta property="og:title" content="{{ latestPost.data.title }}" />
       <meta property="og:url" href="{{ metadata.base }}{{ latestPost.url }}" />
-      <meta property="og:image" content="{{ metadata.base }}{{ latestPost.data.images[0] }}" />
+      {%- if latestPost.data.metaimage %}
+        <meta property="og:image" content="{{ metadata.base }}{{ latestPost.data.metaimage }}" />
+        {% else %}
+        <meta property="og:image" content="{{ metadata.base }}{{ latestPost.data.images[0] }}" />
+      {% endif %}
     {% endif %}
     <meta property="og:description" content="{{ metadata.description }}">
     
   <body>
-    {%# We use `render` tags to include other liquid files in our template %}
-    {% render 'header.liquid' %}
-    {% comment %}
-    Since this file is used as a layout, we use the `content` variable to mark
-    where the contents of pages that use this layout go!
-    (https://www.11ty.dev/docs/layouts/)
-    {% endcomment %}
+    {% render 'header.liquid' %}  
     <main>
-      <!-- Delete this message -->
-      <!-- <div class="subPage">
-        <h2>Hold up!</h2>
-        <p>This site isn't
-          <em>actually</em>
-          using
-          <a href="https://geno7.neocities.org/">Geno7's</a>
-          fantastic
-          <a href="https://rarebit.neocities.org/">Rarebit</a>
-          template. Rather, it's using a similar template that was built using
-          <a href="https://www.11ty.dev/">Eleventy</a>, a static site generator! Check out the
-          <a href="https://github.com/covalria-sow/eleventy-rarebit-template">GitHub</a>
-          for more info!</p>
-        <p>If you're reading this after successfully setting up the template locally, there's a few things left for you to do:</p>
-        <ul>
-          <li>Update
-            <code>_data/metadata.js</code>
-            with your webcomic's title.</li>
-          <li>(Optional) Edit
-            <code>eleventy.config.js</code>
-            with your
-            <a href="https://www.11ty.dev/docs/config/">configuration preferences</a>.</li>
-          <li>Delete this message from
-            <code>_includes/layouts/base.liquid</code>.</li>
-        </ol>
-      </div> -->
-      <!-- Stop deleting -->
-
       {{ content }}
     </main>
     {% render 'footer.liquid' %}
